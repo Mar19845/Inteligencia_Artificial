@@ -1,3 +1,4 @@
+import numpy as np
 
 def read_file(filename):
     #lines = []
@@ -17,8 +18,9 @@ def read_file(filename):
         results = list(map(int, line.split(',')))
         #append results list to aristas
         aristas.append(results)
-        
-        
+    
+    #convert to np array
+    #aristas = np.array(aristas)
     return n, m, aristas
 
 
