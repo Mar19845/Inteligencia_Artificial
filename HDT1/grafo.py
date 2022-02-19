@@ -32,7 +32,7 @@ G.addEdges(aristas)
 
 
 def dijkstra(graph, initial,end):
-    visited = {initial : 0}
+    vecino = {initial : 0}
     path = defaultdict(list)
 
     nodes = set(graph.nodes)
@@ -40,29 +40,29 @@ def dijkstra(graph, initial,end):
     while nodes:
         minNode = None
         for node in nodes:
-            if node in visited:
+            if node in vecino:
                 if minNode is None:
                     minNode = node
-                elif visited[node] < visited[minNode]:
+                elif vecino[node] < vecino[minNode]:
                     minNode = node
         if minNode is None:
             break
         nodes.remove(minNode)
-        currentWeight = visited[minNode]
+        currentWeight = vecino[minNode]
         for edge in graph.edges[minNode]:
             weight = currentWeight + graph.distances[(minNode, edge)]
-            if edge not in visited or weight < visited[edge]:
-                visited[edge] = weight
+            if edge not in vecino or weight < vecino[edge]:
+                vecino[edge] = weight
                 path[edge].append(minNode)
     
     
     camino = [end]
-    if visited[end] < inf:
+    if vecino[end] < inf:
         while initial not in camino:
             last_index = camino[-1]
             val = path[last_index]
             camino.append(val[0])
-    distancia = visited[end]
+    distancia = vecino[end]
     return distancia,camino
 
 print(dijkstra(G,'1','5'))
