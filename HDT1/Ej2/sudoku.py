@@ -13,6 +13,13 @@ def sudokuDFS(n, m, positions):
 
     for i in range(0, end):
         x, y, c = positions[i].split()
-        print(x,y,c)
-        
+        x = int(x)
+        y = int(y)
+        c = int(c)
+            
+        sudoku[x-1][y-1]=c
+
+    endSdk = len(sudoku)
+    for i in range(0,endSdk):
+        print(sudoku[i])
     
