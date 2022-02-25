@@ -21,6 +21,8 @@ def solve(grid, row, col, num):
         val = 2
     elif M == 9:
         val = 3
+    elif M == 6:
+        val = 2
     startRow = row - row % val
     startCol = col - col % val
     for i in range(2):

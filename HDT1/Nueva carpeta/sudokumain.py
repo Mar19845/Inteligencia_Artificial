@@ -31,9 +31,11 @@ while(st):
         print("________________")
         print("  ") 
         print("Solucion con Backtracking Algorithm") 
-        print("  ") 
-        sdk6.solution(matrisLista) 
-        sdk6.print_board(matrisLista) 
+        print("  ")
+        if (sdk6.Suduko(matrisLista, 0, 0)):
+                sdk6.puzzle(matrisLista)
+        else:
+            print("Solution does not exist:(")
         print("  ")
         print("Success!") 
     elif dim == "9":
