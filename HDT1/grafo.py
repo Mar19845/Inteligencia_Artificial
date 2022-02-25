@@ -19,7 +19,7 @@ class Graph:
         for arista in aristas:
             self.edges[arista[0]].append(arista[1])
             self.distances[(arista[0], arista[1])] = arista[2]
-        
+'''
 n,m,aristas = read_file('grafo.txt')
 _,nodes = create_graph(aristas)
 
@@ -29,7 +29,7 @@ G.addEdges(aristas)
 #print(G.nodes)
 #print(G.edges)
 #print(G.distances)
-
+'''
 
 def dijkstra(graph, initial,end):
     vecino = {initial : 0}
@@ -64,7 +64,7 @@ def dijkstra(graph, initial,end):
             camino.append(val[0])
     distancia = vecino[end]
     return distancia,camino
-
+'''
 print(dijkstra(G,'1','5'))
 
 import networkx as nx
@@ -75,4 +75,4 @@ G.add_weighted_edges_from(aristas)
 print('-----------------------')
 print(nx.dijkstra_path(G,'1','5'))
 print(nx.dijkstra_path_length(G,'1','5'))
-
+'''
