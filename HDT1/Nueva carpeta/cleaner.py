@@ -13,5 +13,5 @@ def fileCleaner(txt):
     for i in lines[2:end]:
         positions.append(i)
 
-    sdk.sudokuDFS(n, m, positions)
-   
+    matrisLista = sdk.sudokuDFS(n, m, positions)
+    return matrisLista

@@ -1,5 +1,7 @@
+
+
 ###sudoku resolver 
-M = int(input("que sudoku desea resolver"))
+M = int(input("que sudoku esta resolviendo?"))
 def puzzle(a):
     for i in range(M):
         for j in range(M):
@@ -47,13 +49,4 @@ def Suduko(grid, row, col):
     return False
  
 '''0 means the cells where no value is assigned'''
-grid = [[2, 0, 0, 4],
-        [4, 0, 3, 0],
-    [0, 2, 4, 1],
-    [1, 4, 0, 3]]
-   
- 
-if (Suduko(grid, 0, 0)):
-    puzzle(grid)
-else:
-    print("Solution does not exist:(")
+

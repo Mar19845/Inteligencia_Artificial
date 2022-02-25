@@ -1,7 +1,7 @@
 def sudokuDFS(n, m, positions):
     n = int(n)
     sudoku = []
-    
+    matrisLista = []
     for i in range(0,n):
         row = []
         for j in range(0,n):
@@ -22,6 +22,10 @@ def sudokuDFS(n, m, positions):
     endSdk = len(sudoku)
     for i in range(0,endSdk):
         print(sudoku[i])
+        matrisLista.append(sudoku[i])
+    return matrisLista
+
+
 
 
 
