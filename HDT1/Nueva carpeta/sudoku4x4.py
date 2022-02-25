@@ -1,4 +1,5 @@
-M = 4
+###sudoku resolver 
+M = int(input("que sudoku desea resolver"))
 def puzzle(a):
     for i in range(M):
         for j in range(M):
@@ -14,8 +15,12 @@ def solve(grid, row, col, num):
             return False
  
  
-    startRow = row - row % 2
-    startCol = col - col % 2
+    if M == 4:
+        val = 2
+    elif M == 9:
+        val = 3
+    startRow = row - row % val
+    startCol = col - col % val
     for i in range(2):
         for j in range(2):
             if grid[i + startRow][j + startCol] == num:

@@ -22,4 +22,9 @@ def sudokuDFS(n, m, positions):
     endSdk = len(sudoku)
     for i in range(0,endSdk):
         print(sudoku[i])
+
+
+
+
+
     
