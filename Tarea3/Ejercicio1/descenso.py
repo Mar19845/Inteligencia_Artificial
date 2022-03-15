@@ -1,30 +1,100 @@
+from __future__ import print_function
 import sympy as sp
 import numpy as np
+import matplotlib.pyplot as plt
 
-x = sp.Symbol('x')
+#define variables t
+x, y = sp.symbols('x y') 
 
-#ecuacion1
-f = 
-dfdx = (x**4)+1-4*x+0.5
-gradient = sp.diff(dfdx)
+#ejercicio 1 prueba
+func = (x**4) + (y**4) - (4*x*y) + (0.5*y) + 1
 
-print(gradient)
+#ejercicio 2 prueba
+#func = 100 *( (y-x**2)**2) + ((1-x)**2)
 
-#ecuacion2
 
-dfdx1 =(x**2)-(100*x**2)-(2*x)
-gradient1 = sp.diff(dfdx1)
+#function that calculates the derivate of a function based on given variable
+def derivate_functions(func,variables):
+    return sp.diff(func, variables)
 
-print(gradient1)
+#evaluates a function based on given variable values, return a value
+def solve_function(func,x_value,y_value):
+    return func.subs([(x, x_value), (y, y_value)])
 
-#ecuacion3
+#return a tuple or numpy array of two dimensiones as a intial point
+def get_random_point():
+    # valores 4 y 2 hay que varialos
+    return (np.random.rand(2) *4) - 2
 
-dfdx2 = 0 #sepaputas
-gradient2 = sp.diff(dfdx2)
+def gradiente(func,x_value,y_value):
+    grad = np.random.rand(2)
+    #solve for x
+    #grad[0] = derivate_functions(func,x)
+    #solve for y
+    #grad[1] = derivate_functions(func,y)
+    
+    grad[0] = solve_function(derivate_functions(func,x),x_value,y_value)
+    grad[1] = solve_function(derivate_functions(func,y),x_value,y_value)
+    
+    return grad
 
-print(gradient2)
-
-def trainDes(f, df, x0, alpha, maxIter, e):
-    iterCounter = 0
+def trainDes(func,alpha,maxIter,rango):
+    
+    resolution = 100
+    _X = np.linspace(rango[0],rango[1],resolution)
+    _Y = np.linspace(rango[0],rango[1],resolution)
+    
+    _Z = np.zeros((resolution,resolution))
+    
+    vectorInicial = get_random_point()
+    vectores = np.copy(vectorInicial)
+    vect = []
+    h = 0.001
+    grad = np.zeros(2)
+    for iy,yv in enumerate(_Y):
+        for ix,xv in enumerate(_X):
+            _Z[iy,ix]= solve_function(func,xv,yv)
+            
+            
+    for i in range(maxIter):
+        for it,th in enumerate(vectorInicial):
+            vectores = np.copy(vectorInicial)
+            vectores[it] = vectores[it] + h
+            derivada = (solve_function(func,*vectores)-solve_function(func,*vectorInicial))/h
+            #grad[it] = solve_function(func,*vectores)
+            grad[it] = derivada
+        
+        vectorInicial = vectorInicial - alpha * grad
+        vect.append(vectorInicial - alpha * grad)
+        
+    return _X,_Y,_Z,vectorInicial,vect
+'''
+def trainDes(func,alpha, maxIter, e):
+    num_iterations = []
+    z_values = []
+    x_value = []
+    y_value = []
+    
+    vector0 = get_random_point()
+    
+    vector = vector0
+    for i in range(maxIter):
+        gradiente_f = gradiente(func,*vector)
+        
+        #calular vector
+        vector = vector - alpha*gradiente_f
+        
+        #almacenar valor de z corresponding
+        z_values.append(solve_function(func,*vector))
+        x_value.append(vector[0])
+        y_value.append(vector[1])
+        num_iterations.append(i+1)
+    return z_values,num_iterations,x_value,y_value
+'''
+_X,_Y,_Z,vectorInicial,vect = trainDes(func,0.001, 1000,rango=[-2,2])
+plt.contour(_X,_Y,_Z,100)
+for point in vect:
+    plt.plot(point[0],point[1],'.',c='red',alpha=0.4)
+plt.show()
 
 
