@@ -1,3 +1,4 @@
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -5,7 +6,7 @@ import matplotlib.pyplot as plt
 def pathReader():
     count = 0
     path = []
-    with open("array.txt") as f:
+    with open("path.txt") as f:
         lines = f.readlines()
         for line in lines:
             if line.startswith('#'):
@@ -21,7 +22,7 @@ def pathReader():
                     path.append(pos)
                     
     array = np.array(path)
-    print(array)
+    #print(array)
     return array
 
 pathReader()

@@ -1,66 +1,148 @@
+'''
+Universidad del valle de guatemala
+Inteligencia artificial
+Implementacion obtenida de: https://programmerclick.com/article/9958735557/
+'''
+
 import numpy as np
-from itertools import combinations
-def TSP_SA(G):
-    s = list(range(len(G)))
-    c = cost(G, s)
-    ntrial = 1
-    T = 30
-    alpha = 0.99
+import matplotlib.pyplot as plt 
+import pdb
+import imageio
+import shutil
+import os
+import Lectura as lec
 
-    while ntrial <= 1000:
-      n = np.random.randint(0, len(G))
-      while True:
-         m = np.random.randint(0, len(G))
-         if n != m:
-            break
-      s1 = swap(s, m, n)
-      c1 = cost(G, s1)
-      if c1 < c:
-         s, c = s1, c1
-      else:
-         if np.random.rand() < np.exp(-(c1 - c)/T):
-            s, c = s1, c1
-      T = alpha*T
-      ntrial += 1
+##obtenemos array
+points=lec.pathReader()
+nodo_inicial=points[0]
+print(points)
 
-def swap(s, m, n):
-   i, j = min(m, n), max(m, n)
-   s1 = s.copy()
-   while i < j:
-      s1[i], s1[j] = s1[j], s1[i]
-      i += 1
-      j -= 1
-   return s1
- 
-def cost(G, s):
-   l = 0
-   for i in range(len(s)-1):
-      l += G[s[i]][s[i+1]]
-   l += G[s[len(s)-1]][s[0]] 
-   return l
+# Generar matriz de distancia
+def getDismat(points):
+    dismat = np.zeros((N,N))
+    for i in range(N):
+        for j in range(i,N):
+            dismat[i][j] = dismat[j][i] = np.linalg.norm(points[i]-points[j])
+    return dismat
+
+def init():
+    alpha = 0.9
+    t = (1,100)
+    TIME = 1000
+    way = np.arange(N)
+    waydis = calWayDis(way)
+    return alpha,t,TIME,way,waydis
+
+# Calcular la longitud del camino
+def calWayDis(way0):
+    waydis = 0
+    for i in range(N-1):
+        waydis +=dismat[way0[i]][way0[i+1]] 
+    waydis += dismat[way0[N-1]][way0[0]]
+    return waydis
+
+def draw(way,dist,nodo_inicial):
+    global N,points ,TIMESIT, PNGFILE, PNGLIST
+    plt.cla()
+    plt.title('cross=%.4f' % dist)
+    xs = [points[i][0] for i in range(N)]
+    ys = [points[i][1] for i in range(N)]
+    plt.scatter(xs, ys, color='b')
+    xs = np.array(xs)
+    ys = np.array(ys)
+    # plt.plot(xs[[0, solutionpath[0]]], ys[[0, solutionpath[0]]], color='r')
+    # Ruta de conexión
+    for i in range(N-1):
+        plt.plot(xs[[way[i], way[i + 1]]], ys[[way[i], way[i + 1]]], color='r')
+    # Conecte el punto final con el punto inicial
+    plt.plot(xs[[way[N - 1], 0]], ys[[way[N - 1], 0]], color='r')
+    for i, p in enumerate(points):
+        plt.text(*p, '%d' % i)
+    plt.savefig('%s/%d.png' % (PNGFILE, TIMESIT))
+    PNGLIST.append('%s/%d.png' % (PNGFILE, TIMESIT))
+    TIMESIT += 1
 
 
-def read_file(filename):
-    #lines = []
-    with open(filename, 'r') as f:
-        lines = f.readlines()
+N = points.shape[0]
+dismat = getDismat(points)
+alpha,t,TIME,way,waydis=init()
+t0 = t[1]
+K=0.8
+
+# Dibujo inicial
+TIMESIT = 0
+PNGFILE = './png/'
+PNGLIST = []
+if not os.path.exists(PNGFILE):
+    os.mkdir(PNGFILE)
+else:
+    shutil.rmtree(PNGFILE)
+    os.mkdir(PNGFILE)
+# Registre el resultado de cada iteración
+result = []
+tempway = way.copy()
+bestway = way.copy()
+bestdis = 10000
+
+while t0>t[0]:
+    for i in range(TIME):
+        if np.random.rand() > 0.5:
+        # Intercambio de dos puntos
+            while True:
+            # Genera aleatoriamente 2 puntos diferentes,
+                city1 = int(np.ceil(np.random.rand()*(N-1)))
+                city2 = int(np.ceil(np.random.rand()*(N-1)))
+                if city1!=city2:
+                    break
+            tempway[city1],tempway[city2]=tempway[city2],tempway[city1]
+        else:
+            # 3 puntos
+            while True:
+                city1 = int(np.ceil(np.random.rand()*(N-1)))
+                city2 = int(np.ceil(np.random.rand()*(N-1))) 
+                city3 = int(np.ceil(np.random.rand()*(N-1)))
+                if((city1 != city2)&(city2 != city3)&(city1 != city3)):
+                    break
+            # Las siguientes tres sentencias hacen que city1 <city2 <city3
+            if city1 > city2:
+                city1,city2 = city2,city1
+            if city2 > city3:
+                city2,city3 = city3,city2
+            if city1 > city2:
+                city1,city2 = city2,city1
+            #Las siguientes tres líneas de código insertan los datos en el intervalo (ciudad1, ciudad2) después de ciudad3
+            temp = tempway[city1:city2].copy()
+            tempway[city1:city3-city2+1+city1] = tempway[city2:city3+1].copy()
+            tempway[city3-city2+1+city1:city3+1] = temp.copy()
+
+        tempdis = calWayDis(tempway)
+        if tempdis<waydis:
+            way = tempway.copy()
+            waydis = tempdis
+        if tempdis<bestdis:
+            bestway = tempway.copy()
+            bestdis = tempdis
+            draw(bestway,bestdis,nodo_inicial)
+        else:
+            if np.random.rand()<np.exp(-(tempdis-waydis)/(t0)):
+                way = tempway.copy()
+                waydis = tempdis
+                # Actualizar ruta
+            else: tempway = way.copy()
+
+    t0 *= alpha
+    result.append(bestdis)
+
+print("Ruta más corta:% s"%np.array(result[-1]))
+
+print('Pasos:')
+for i in bestway:
+    print(i,end=" -> ")
+print(bestway[0])
+
+
+#Todas las rutas posibles
+generated_images = []
+for png_path in PNGLIST:
+    generated_images.append(imageio.imread(png_path))
     
-    n = int(lines[0])
-    m = int(lines[1])
-    #remove n and m from list
-    lines.pop(0)
-    lines.pop(0)
-    
-    #create list wiht the info of aristas
-    aristas = []
-    for line in lines:
-        #split vaules in line and convert to int
-        #results = list(map(int, line.split(',')))
-        results = line.split(',')
-        results[2] = int(results[2])
-        #append results list to aristas
-        aristas.append(results)
-    
-    #convert to np array
-    #aristas = np.array(aristas)
-    return n, m, aristas
