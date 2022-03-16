@@ -6,13 +6,6 @@ import matplotlib.pyplot as plt
 #define variables t
 x, y = sp.symbols('x y') 
 
-#ejercicio 1 prueba
-func = (x**4) + (y**4) - (4*x*y) + (0.5*y) + 1
-
-#ejercicio 2 prueba
-#func = 100 *( (y-x**2)**2) + ((1-x)**2)
-
-
 #function that calculates the derivate of a function based on given variable
 def derivate_functions(func,variables):
     return sp.diff(func, variables)
@@ -28,6 +21,7 @@ def get_random_point():
 
 def gradiente(func,x_value,y_value):
     grad = np.random.rand(2)
+    
     #solve for x
     #grad[0] = derivate_functions(func,x)
     #solve for y
@@ -91,10 +85,40 @@ def trainDes(func,alpha, maxIter, e):
         num_iterations.append(i+1)
     return z_values,num_iterations,x_value,y_value
 '''
-_X,_Y,_Z,vectorInicial,vect = trainDes(func,0.001, 1000,rango=[-2,2])
-plt.contour(_X,_Y,_Z,100)
-for point in vect:
-    plt.plot(point[0],point[1],'.',c='red',alpha=0.4)
-plt.show()
+
+def rosenbrock10(func,alpha,maxIter,rango):
+    for i in range(10):
+
+        resolution = 100
+        _X = np.linspace(rango[0],rango[1],resolution)
+        _Y = np.linspace(rango[0],rango[1],resolution)
+        _Z = np.zeros((resolution,resolution))
+    
+        vectorInicial = get_random_point()
+        vectores = np.copy(vectorInicial)
+        vect = []
+        h = 0.001
+        grad = np.zeros(2)
+        for iy,yv in enumerate(_Y):
+            for ix,xv in enumerate(_X):
+                _Z[iy,ix]= solve_function(func,xv,yv)
+            
+            
+        for i in range(maxIter):
+            for it,th in enumerate(vectorInicial):
+                vectores = np.copy(vectorInicial)
+                vectores[it] = vectores[it] + h
+                derivada = (solve_function(func,*vectores)-solve_function(func,*vectorInicial))/h
+                #grad[it] = solve_function(func,*vectores)
+                grad[it] = derivada
+            
+            vectorInicial = vectorInicial - alpha * grad
+            vect.append(vectorInicial - alpha * grad)
+        
+        return _X,_Y,_Z,vectorInicial,vect
+
+
+
+
 
 
