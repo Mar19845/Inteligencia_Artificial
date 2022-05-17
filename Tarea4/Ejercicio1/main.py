@@ -1,5 +1,7 @@
 from random import randint
 from helpers import *
+import time
+inicio = time.time()
 
 #max number of iterations
 INT_MAX = 2147483647
@@ -96,3 +98,6 @@ mp = [
     ]
 
 TSPUtil(mp)
+print("tiempo de ejecucion: ")
+fin = time.time()
+print(fin-inicio)

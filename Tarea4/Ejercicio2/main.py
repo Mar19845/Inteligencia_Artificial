@@ -1,4 +1,6 @@
 from helpers import *
+import time
+inicio = time.time()
 
 #Create a sudoku 
 # pass data for the genetic algorithm 
@@ -19,3 +21,7 @@ solution = sudoku.solve()
 if solution:
     #save the solution in a txt file
     sudoku.save('output.txt', solution)
+
+print("tiempo de ejecucion: ")
+fin = time.time()
+print(fin-inicio)
