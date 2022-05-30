@@ -3,7 +3,7 @@ import random
 import numpy as np
 from collections import deque
 from metrics import plot
-from agent import Agent, SnakeGameAI
+from snake import Agent, SnakeGameAI
 
 def train():
     plot_scores = []
