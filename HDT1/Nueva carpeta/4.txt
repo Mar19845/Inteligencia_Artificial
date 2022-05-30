@@ -1,4 +1,4 @@
-6
+9 #aqui se cambia la dimension puedes colocar 4, 6 o 9 que corresponde a las dimensiones del sudoku
 5
 1 1 3
 2 4 1
