@@ -1,3 +1,4 @@
+#Sources: https://github.com/python-engineer/snake-ai-pytorch
 import torch
 import random
 import numpy as np
